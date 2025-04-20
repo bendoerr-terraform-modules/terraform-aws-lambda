@@ -1,5 +1,11 @@
 version: 0.1
 projects:
   - path: examples/simple
-    name: Simple Example
-    usage_file: examples/simple/infracost-usage.yml
+    name: Simple Example (Low, 1 request a minute)
+    usage_file: examples/simple/infracost-usage-low.yml
+  - path: examples/simple
+    name: Simple Example (Medium, 1 request a second)
+    usage_file: examples/simple/infracost-usage-medium.yml
+  - path: examples/simple
+    name: Simple Example (High, 4 request a second)
+    usage_file: examples/simple/infracost-usage-high.yml
