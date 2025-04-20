@@ -49,6 +49,7 @@ jobs:
           TF_VAR_route53_zone_id: ${{ secrets.CORE_HOSTED_ZONE_ID }}
           TF_VAR_route53_zone_name: ${{ secrets.CORE_HOSTED_ZONE_NAME }}
         run: |
+          export TERRATEST_TERRAFORM_BINARY=terraform
           go install github.com/jstemmer/go-junit-report@latest
           go test -timeout 20m -v ./... | tee report.txt
           go-junit-report -set-exit-code < report.txt > report.xml
