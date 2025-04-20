@@ -105,7 +105,7 @@ resource "aws_iam_role_policy" "cloudwatch_logs" {
 }
 
 resource "aws_iam_role_policy_attachment" "aws_xray_write_only_access" {
-  count      = var.tracing_mode != null ? 1 : 0
+  count      = var.enable_tracing ? 1 : 0
   role       = aws_iam_role.this.name
   policy_arn = "arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
 }
