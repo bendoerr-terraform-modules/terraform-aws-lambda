@@ -7,6 +7,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/aws/aws-sdk-go-v2/service/lambda"
+
 	"github.com/gruntwork-io/terratest/modules/random"
 
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -41,7 +43,7 @@ func TestDefaults(t *testing.T) {
 	_, _ = pretty.Print(terraform.OutputAll(t, terraformOptions))
 
 	// AWS Session
-	_, err := config.LoadDefaultConfig(
+	sessionConfig, err := config.LoadDefaultConfig(
 		context.Background(),
 		config.WithRegion("us-east-1"),
 	)
@@ -50,8 +52,32 @@ func TestDefaults(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	// Force makediff usage
-	_ = makediff("example", "example")
+	lambdaClient := lambda.NewFromConfig(sessionConfig)
+
+	// Fetch the Lambda function ARN from the Terraform output
+	lambdaFunctionArn := terraform.Output(t, terraformOptions, "lambda_function_arn")
+
+	// Invoke the Lambda function
+	payload := []byte("{}") // empty object as event
+	resp, err := lambdaClient.Invoke(context.TODO(), &lambda.InvokeInput{
+		FunctionName: &lambdaFunctionArn,
+		Payload:      payload,
+	})
+	if err != nil {
+		t.Fatalf("Failed to invoke Lambda function: %v", err)
+	}
+
+	if resp.FunctionError != nil {
+		t.Fatalf("Lambda function returned an error: %s", *resp.FunctionError)
+	}
+
+	// Verify the response
+	expectedOutput := "{\"statusCode\":200,\"body\":\"{\\\"message\\\":\\\"Hello, World!\\\"}\"}"
+	if string(resp.Payload) != expectedOutput {
+		t.Fatalf("Lambda function output mismatch:\n%s", makediff(expectedOutput, string(resp.Payload)))
+	}
+
+	t.Log("Lambda function invoked successfully with the expected output")
 }
 
 func makediff(want interface{}, got interface{}) string {

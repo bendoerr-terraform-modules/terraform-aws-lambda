@@ -1,8 +1,3 @@
-output "caller_identity" {
-  value       = module.this.caller_identity
-  description = "An example output value."
-}
-
 output "id" {
   value       = module.this.id
   description = "The normalized ID from the 'bendoerr-terraform-modules/terraform-null-label' module."
@@ -16,4 +11,9 @@ output "tags" {
 output "name" {
   value       = module.this.name
   description = "The provided name given to the module."
+}
+
+output "lambda_function_arn" {
+  value       = module.this.lambda_function_arn
+  description = "ARN of the deployed Lambda function"
 }
