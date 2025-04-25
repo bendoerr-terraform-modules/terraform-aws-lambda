@@ -148,3 +148,9 @@ variable "addl_inline_policies" {
   type        = map(string)
   default     = {}
 }
+
+variable "source_code_hash" {
+  description = "Used to trigger updates when the content of the Lambda function changes (filebase64sha256 of the source code). If not provided, filebase64sha256(var.filename) will be used."
+  type        = string
+  default     = null
+}
