@@ -11,7 +11,7 @@ resource "aws_lambda_function" "this" {
   tags          = module.label.tags
 
   filename         = var.filename
-  source_code_hash = filebase64sha256(var.filename)
+  source_code_hash = var.source_code_hash != null ? var.source_code_hash : filebase64sha256(var.filename)
 
   runtime       = var.runtime
   memory_size   = var.memory_size

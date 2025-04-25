@@ -52,7 +52,7 @@ TODO
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider_aws) | ~> 5.0 |
+| <a name="provider_aws"></a> [aws](#provider_aws) | 5.95.0 |
 
 ### Modules
 
@@ -98,6 +98,7 @@ TODO
 | <a name="input_name"></a> [name](#input_name) | A descriptive but short name used for labels by the 'bendoerr-terraform-modules/terraform-null-label' module. | `string` | `"thing"` | no |
 | <a name="input_publish"></a> [publish](#input_publish) | Whether to publish a new version of the Lambda function | `bool` | `false` | no |
 | <a name="input_runtime"></a> [runtime](#input_runtime) | Runtime environment for the Lambda function (e.g., python3.9, nodejs14.x) | `string` | n/a | yes |
+| <a name="input_source_code_hash"></a> [source_code_hash](#input_source_code_hash) | Used to trigger updates when the content of the Lambda function changes (filebase64sha256 of the source code). If not provided, filebase64sha256(var.filename) will be used. | `string` | `null` | no |
 | <a name="input_timeout"></a> [timeout](#input_timeout) | Timeout in seconds before the Lambda function is terminated | `number` | `3` | no |
 | <a name="input_tracing_mode"></a> [tracing_mode](#input_tracing_mode) | Tracing mode for AWS X-Ray (e.g., PassThrough, Active) | `string` | `"PassThrough"` | no |
 | <a name="input_vpc_security_group_ids"></a> [vpc_security_group_ids](#input_vpc_security_group_ids) | List of security group IDs for the Lambda function VPC configuration | `list(string)` | `null` | no |
@@ -113,6 +114,7 @@ TODO
 | <a name="output_id"></a> [id](#output_id) | The normalized ID from the 'bendoerr-terraform-modules/terraform-null-label' module. |
 | <a name="output_lambda_function_arn"></a> [lambda_function_arn](#output_lambda_function_arn) | ARN of the deployed Lambda function |
 | <a name="output_lambda_function_invoke_arn"></a> [lambda_function_invoke_arn](#output_lambda_function_invoke_arn) | The invoke ARN of the Lambda function |
+| <a name="output_lambda_function_name"></a> [lambda_function_name](#output_lambda_function_name) | Name of the deployed Lambda function |
 | <a name="output_lambda_function_version"></a> [lambda_function_version](#output_lambda_function_version) | The published version of the Lambda function |
 | <a name="output_lambda_layers_arns"></a> [lambda_layers_arns](#output_lambda_layers_arns) | The ARNs of the Lambda layers attached to the function |
 | <a name="output_name"></a> [name](#output_name) | The provided name given to the module. |
