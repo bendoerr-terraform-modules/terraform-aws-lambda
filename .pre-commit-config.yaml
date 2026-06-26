@@ -41,16 +41,6 @@ repos:
         exclude_types:
           - markdown
 
-  - repo: https://github.com/executablebooks/mdformat
-    rev: 08fba30538869a440b5059de90af03e3502e35fb # frozen: 0.7.17
-    hooks:
-      - id: mdformat
-
-  - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: f295829140d25717bc79368d3f966fc1f67a824f # frozen: v0.41.0
-    hooks:
-      - id: markdownlint-fix-docker
-
   - repo: https://github.com/terraform-docs/terraform-docs
     rev: v0.24.0
     hooks:
@@ -61,12 +51,24 @@ repos:
           [
             "markdown",
             "table",
+            "--indent",
+            "3",
             "--output-file",
             "README.md",
             "--output-mode",
             "inject",
             ".",
           ]
+
+  - repo: https://github.com/executablebooks/mdformat
+    rev: 08fba30538869a440b5059de90af03e3502e35fb # frozen: 0.7.17
+    hooks:
+      - id: mdformat
+
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: f295829140d25717bc79368d3f966fc1f67a824f # frozen: v0.41.0
+    hooks:
+      - id: markdownlint-fix-docker
 
   - repo: https://github.com/golangci/golangci-lint
     rev: c2e095c022a97360f7fff5d49fbc11f273be929a # frozen: v1.60.3
