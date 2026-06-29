@@ -68,6 +68,7 @@ your requirements and this module's constraints. Terraform's dependency resolver
 will find a compatible version automatically.
 
 <!-- BEGIN_TF_DOCS -->
+
 ### Requirements
 
 | Name | Version |
@@ -79,7 +80,7 @@ will find a compatible version automatically.
 
 | Name | Version |
 | ---- | ------- |
-| <a name="provider_aws"></a> [aws](#provider_aws) | 6.52.0 |
+| <a name="provider_aws"></a> [aws](#provider_aws) | ~> 6.0 |
 
 ### Modules
 
@@ -109,7 +110,7 @@ will find a compatible version automatically.
 | <a name="input_addl_assume_role_policy_principles"></a> [addl_assume_role_policy_principles](#input_addl_assume_role_policy_principles) | Additional assume role policy principles for the lambda IAM role, such as 'edgelambda.amazonaws.com'. | `list(string)` | `[]` | no |
 | <a name="input_addl_inline_policies"></a> [addl_inline_policies](#input_addl_inline_policies) | A map of additional inline policies to attach to the IAM role. The key is the policy name, and the value is a JSON policy document. | `map(string)` | `{}` | no |
 | <a name="input_addl_policies"></a> [addl_policies](#input_addl_policies) | A list of additional policy ARNs to attach to the Lambda's IAM role | `list(string)` | `[]` | no |
-| <a name="input_architectures"></a> [architectures](#input_architectures) | Architectures supported by the Lambda function (e.g., x86_64, arm64) | `list(string)` | <pre>[<br/>  "x86_64"<br/>]</pre> | no |
+| <a name="input_architectures"></a> [architectures](#input_architectures) | Architectures supported by the Lambda function (e.g., x86_64, arm64) | `list(string)` | <pre>\[<br/>  "x86_64"<br/>\]</pre> | no |
 | <a name="input_cloudwatch_kms_key_arn"></a> [cloudwatch_kms_key_arn](#input_cloudwatch_kms_key_arn) | DEPRECATED, use cloudwatch_logs.kms_key_arn instead. KMS Key ARN to encrypt the CloudWatch Logs. | `string` | `null` | no |
 | <a name="input_cloudwatch_logs"></a> [cloudwatch_logs](#input_cloudwatch_logs) | CloudWatch Logs configuration for the Lambda function. Takes precedence over the deprecated enable_cloudwatch_logs / cloudwatch_retention_in_days / cloudwatch_kms_key_arn variables. | <pre>object({<br/>    enabled           = optional(bool, true)<br/>    retention_in_days = optional(number, 30)<br/>    kms_key_arn       = optional(string)<br/>  })</pre> | `null` | no |
 | <a name="input_cloudwatch_retention_in_days"></a> [cloudwatch_retention_in_days](#input_cloudwatch_retention_in_days) | DEPRECATED, use cloudwatch_logs.retention_in_days instead. Number of days to retain log events in the specified log group. | `number` | `30` | no |
@@ -150,6 +151,7 @@ will find a compatible version automatically.
 | <a name="output_lambda_layers_arns"></a> [lambda_layers_arns](#output_lambda_layers_arns) | The ARNs of the Lambda layers attached to the function |
 | <a name="output_name"></a> [name](#output_name) | The provided name given to the module. |
 | <a name="output_tags"></a> [tags](#output_tags) | The normalized tags from the 'bendoerr-terraform-modules/terraform-null-label' module. |
+
 <!-- END_TF_DOCS -->
 
 ## Roadmap
