@@ -68,19 +68,18 @@ your requirements and this module's constraints. Terraform's dependency resolver
 will find a compatible version automatically.
 
 <!-- BEGIN_TF_DOCS -->
-
 ### Requirements
 
 | Name | Version |
 | ---- | ------- |
-| <a name="requirement_terraform"></a> [terraform](#requirement_terraform) | >= 1.0.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement_terraform) | >= 1.3.0 |
 | <a name="requirement_aws"></a> [aws](#requirement_aws) | ~> 6.0 |
 
 ### Providers
 
 | Name | Version |
 | ---- | ------- |
-| <a name="provider_aws"></a> [aws](#provider_aws) | ~> 6.0 |
+| <a name="provider_aws"></a> [aws](#provider_aws) | 6.52.0 |
 
 ### Modules
 
@@ -110,15 +109,17 @@ will find a compatible version automatically.
 | <a name="input_addl_assume_role_policy_principles"></a> [addl_assume_role_policy_principles](#input_addl_assume_role_policy_principles) | Additional assume role policy principles for the lambda IAM role, such as 'edgelambda.amazonaws.com'. | `list(string)` | `[]` | no |
 | <a name="input_addl_inline_policies"></a> [addl_inline_policies](#input_addl_inline_policies) | A map of additional inline policies to attach to the IAM role. The key is the policy name, and the value is a JSON policy document. | `map(string)` | `{}` | no |
 | <a name="input_addl_policies"></a> [addl_policies](#input_addl_policies) | A list of additional policy ARNs to attach to the Lambda's IAM role | `list(string)` | `[]` | no |
-| <a name="input_architectures"></a> [architectures](#input_architectures) | Architectures supported by the Lambda function (e.g., x86_64, arm64) | `list(string)` | <pre>\[<br/>  "x86_64"<br/>\]</pre> | no |
-| <a name="input_cloudwatch_kms_key_arn"></a> [cloudwatch_kms_key_arn](#input_cloudwatch_kms_key_arn) | KMS Key ARN to encrypt the CloudWatch Logs | `string` | `null` | no |
-| <a name="input_cloudwatch_retention_in_days"></a> [cloudwatch_retention_in_days](#input_cloudwatch_retention_in_days) | Number of days to retain log events in the specified log group | `number` | `30` | no |
+| <a name="input_architectures"></a> [architectures](#input_architectures) | Architectures supported by the Lambda function (e.g., x86_64, arm64) | `list(string)` | <pre>[<br/>  "x86_64"<br/>]</pre> | no |
+| <a name="input_cloudwatch_kms_key_arn"></a> [cloudwatch_kms_key_arn](#input_cloudwatch_kms_key_arn) | DEPRECATED, use cloudwatch_logs.kms_key_arn instead. KMS Key ARN to encrypt the CloudWatch Logs. | `string` | `null` | no |
+| <a name="input_cloudwatch_logs"></a> [cloudwatch_logs](#input_cloudwatch_logs) | CloudWatch Logs configuration for the Lambda function. Takes precedence over the deprecated enable_cloudwatch_logs / cloudwatch_retention_in_days / cloudwatch_kms_key_arn variables. | <pre>object({<br/>    enabled           = optional(bool, true)<br/>    retention_in_days = optional(number, 30)<br/>    kms_key_arn       = optional(string)<br/>  })</pre> | `null` | no |
+| <a name="input_cloudwatch_retention_in_days"></a> [cloudwatch_retention_in_days](#input_cloudwatch_retention_in_days) | DEPRECATED, use cloudwatch_logs.retention_in_days instead. Number of days to retain log events in the specified log group. | `number` | `30` | no |
 | <a name="input_context"></a> [context](#input_context) | Shared context from the 'bendoerr-terraform-modules/terraform-null-context' module. | <pre>object({<br/>    attributes     = list(string)<br/>    dns_namespace  = string<br/>    environment    = string<br/>    instance       = string<br/>    instance_short = string<br/>    namespace      = string<br/>    region         = string<br/>    region_short   = string<br/>    role           = string<br/>    role_short     = string<br/>    project        = string<br/>    tags           = map(string)<br/>  })</pre> | n/a | yes |
 | <a name="input_description"></a> [description](#input_description) | Description of the Lambda function | `string` | n/a | yes |
-| <a name="input_enable_cloudwatch_logs"></a> [enable_cloudwatch_logs](#input_enable_cloudwatch_logs) | Flag to enable or disable the creation of CloudWatch Logs | `bool` | `true` | no |
-| <a name="input_enable_tracing"></a> [enable_tracing](#input_enable_tracing) | Whether to enable AWS X-Ray tracing for the Lambda function | `bool` | `false` | no |
-| <a name="input_env_kms_key_arn"></a> [env_kms_key_arn](#input_env_kms_key_arn) | The ARN of the KMS key to be used for encrypting environment variables in the Lambda function | `string` | `null` | no |
-| <a name="input_environment_variables"></a> [environment_variables](#input_environment_variables) | Key-value pairs of environment variables for the Lambda function | `map(string)` | `{}` | no |
+| <a name="input_enable_cloudwatch_logs"></a> [enable_cloudwatch_logs](#input_enable_cloudwatch_logs) | DEPRECATED, use cloudwatch_logs.enabled instead. Flag to enable or disable the creation of CloudWatch Logs. | `bool` | `true` | no |
+| <a name="input_enable_tracing"></a> [enable_tracing](#input_enable_tracing) | DEPRECATED, use tracing_config.enabled instead. Whether to enable AWS X-Ray tracing for the Lambda function. | `bool` | `false` | no |
+| <a name="input_env_kms_key_arn"></a> [env_kms_key_arn](#input_env_kms_key_arn) | DEPRECATED, use environment.kms_key_arn instead. The ARN of the KMS key to be used for encrypting environment variables in the Lambda function. | `string` | `null` | no |
+| <a name="input_environment"></a> [environment](#input_environment) | Environment variable configuration for the Lambda function. Takes precedence over the deprecated environment_variables / env_kms_key_arn variables. | <pre>object({<br/>    variables   = optional(map(string), {})<br/>    kms_key_arn = optional(string)<br/>  })</pre> | `null` | no |
+| <a name="input_environment_variables"></a> [environment_variables](#input_environment_variables) | DEPRECATED, use environment.variables instead. Key-value pairs of environment variables for the Lambda function. | `map(string)` | `{}` | no |
 | <a name="input_filename"></a> [filename](#input_filename) | Path to the file with the AWS Lambda function source code. | `string` | n/a | yes |
 | <a name="input_handler"></a> [handler](#input_handler) | The function entrypoint in your code. | `string` | n/a | yes |
 | <a name="input_layers"></a> [layers](#input_layers) | List of ARNs of Lambda layers to include | `list(string)` | `[]` | no |
@@ -128,9 +129,11 @@ will find a compatible version automatically.
 | <a name="input_runtime"></a> [runtime](#input_runtime) | Runtime environment for the Lambda function (e.g., python3.9, nodejs14.x) | `string` | n/a | yes |
 | <a name="input_source_code_hash"></a> [source_code_hash](#input_source_code_hash) | Used to trigger updates when the content of the Lambda function changes (filebase64sha256 of the source code). If not provided, filebase64sha256(var.filename) will be used. | `string` | `null` | no |
 | <a name="input_timeout"></a> [timeout](#input_timeout) | Timeout in seconds before the Lambda function is terminated | `number` | `3` | no |
-| <a name="input_tracing_mode"></a> [tracing_mode](#input_tracing_mode) | Tracing mode for AWS X-Ray (e.g., PassThrough, Active) | `string` | `"PassThrough"` | no |
-| <a name="input_vpc_security_group_ids"></a> [vpc_security_group_ids](#input_vpc_security_group_ids) | List of security group IDs for the Lambda function VPC configuration | `list(string)` | `null` | no |
-| <a name="input_vpc_subnet_ids"></a> [vpc_subnet_ids](#input_vpc_subnet_ids) | List of subnet IDs for the Lambda function VPC configuration | `list(string)` | `null` | no |
+| <a name="input_tracing_config"></a> [tracing_config](#input_tracing_config) | X-Ray tracing configuration for the Lambda function. Takes precedence over the deprecated enable_tracing / tracing_mode variables. | <pre>object({<br/>    enabled = optional(bool, false)<br/>    mode    = optional(string, "PassThrough")<br/>  })</pre> | `null` | no |
+| <a name="input_tracing_mode"></a> [tracing_mode](#input_tracing_mode) | DEPRECATED, use tracing_config.mode instead. Tracing mode for AWS X-Ray (e.g., PassThrough, Active). | `string` | `"PassThrough"` | no |
+| <a name="input_vpc_config"></a> [vpc_config](#input_vpc_config) | VPC configuration for the Lambda function. When null, the function is not deployed in a VPC. Takes precedence over the deprecated vpc_subnet_ids / vpc_security_group_ids variables. | <pre>object({<br/>    subnet_ids         = list(string)<br/>    security_group_ids = list(string)<br/>  })</pre> | `null` | no |
+| <a name="input_vpc_security_group_ids"></a> [vpc_security_group_ids](#input_vpc_security_group_ids) | DEPRECATED, use vpc_config.security_group_ids instead. List of security group IDs for the Lambda function VPC configuration. | `list(string)` | `null` | no |
+| <a name="input_vpc_subnet_ids"></a> [vpc_subnet_ids](#input_vpc_subnet_ids) | DEPRECATED, use vpc_config.subnet_ids instead. List of subnet IDs for the Lambda function VPC configuration. | `list(string)` | `null` | no |
 
 ### Outputs
 
@@ -147,7 +150,6 @@ will find a compatible version automatically.
 | <a name="output_lambda_layers_arns"></a> [lambda_layers_arns](#output_lambda_layers_arns) | The ARNs of the Lambda layers attached to the function |
 | <a name="output_name"></a> [name](#output_name) | The provided name given to the module. |
 | <a name="output_tags"></a> [tags](#output_tags) | The normalized tags from the 'bendoerr-terraform-modules/terraform-null-label' module. |
-
 <!-- END_TF_DOCS -->
 
 ## Roadmap
