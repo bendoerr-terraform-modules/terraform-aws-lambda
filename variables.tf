@@ -176,7 +176,7 @@ variable "tracing_mode" {
 }
 
 variable "vpc_config" {
-  description = "VPC configuration for the Lambda function. When null, the function is not deployed in a VPC. Takes precedence over the deprecated vpc_subnet_ids / vpc_security_group_ids variables."
+  description = "VPC configuration for the Lambda function. When set, takes precedence over the deprecated vpc_subnet_ids / vpc_security_group_ids variables; when null, those are used as a fallback. If neither the object nor the legacy variables are set, the function is not deployed in a VPC."
   type = object({
     subnet_ids         = list(string)
     security_group_ids = list(string)

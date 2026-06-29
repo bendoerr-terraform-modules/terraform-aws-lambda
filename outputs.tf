@@ -45,10 +45,10 @@ output "iam_role_arn" {
 
 output "cloudwatch_log_group_name" {
   description = "The name of the CloudWatch Log Group for the Lambda function"
-  value       = var.enable_cloudwatch_logs ? aws_cloudwatch_log_group.this[0].name : null
+  value       = local.cloudwatch_enabled ? aws_cloudwatch_log_group.this[0].name : null
 }
 
 output "cloudwatch_log_group_arn" {
   description = "The ARN of the CloudWatch Log Group for the Lambda function"
-  value       = var.enable_cloudwatch_logs ? aws_cloudwatch_log_group.this[0].arn : null
+  value       = local.cloudwatch_enabled ? aws_cloudwatch_log_group.this[0].arn : null
 }
