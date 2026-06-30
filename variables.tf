@@ -108,8 +108,24 @@ variable "layers" {
   }
 }
 
+variable "environment" {
+  description = "Environment variable configuration for the Lambda function. Takes precedence over the deprecated environment_variables / env_kms_key_arn variables."
+  type = object({
+    variables   = optional(map(string), {})
+    kms_key_arn = optional(string)
+  })
+  default = null
+
+  validation {
+    # null kms_key_arn = use the AWS-managed default key (passed straight through).
+    # Partition left open (aws / aws-us-gov / aws-cn); key/ allows the mrk- prefix.
+    condition     = var.environment == null || var.environment.kms_key_arn == null || can(regex("^arn:aws[a-z-]*:kms:[a-z0-9-]+:[0-9]{12}:(key/[0-9a-zA-Z-]+|alias/[a-zA-Z0-9/_-]+)$", var.environment.kms_key_arn))
+    error_message = "environment.kms_key_arn must be null or a valid KMS key or alias ARN (e.g. arn:aws:kms:us-east-1:123456789012:key/<id>)."
+  }
+}
+
 variable "env_kms_key_arn" {
-  description = "The ARN of the KMS key to be used for encrypting environment variables in the Lambda function"
+  description = "DEPRECATED, use environment.kms_key_arn instead. The ARN of the KMS key to be used for encrypting environment variables in the Lambda function."
   type        = string
   default     = null
 
@@ -123,19 +139,33 @@ variable "env_kms_key_arn" {
 }
 
 variable "environment_variables" {
-  description = "Key-value pairs of environment variables for the Lambda function"
+  description = "DEPRECATED, use environment.variables instead. Key-value pairs of environment variables for the Lambda function."
   type        = map(string)
   default     = {}
 }
 
+variable "tracing_config" {
+  description = "X-Ray tracing configuration for the Lambda function. Takes precedence over the deprecated enable_tracing / tracing_mode variables."
+  type = object({
+    enabled = optional(bool, false)
+    mode    = optional(string, "PassThrough")
+  })
+  default = null
+
+  validation {
+    condition     = var.tracing_config == null || contains(["PassThrough", "Active"], var.tracing_config.mode)
+    error_message = "tracing_config.mode must be either \"PassThrough\" or \"Active\"."
+  }
+}
+
 variable "enable_tracing" {
-  description = "Whether to enable AWS X-Ray tracing for the Lambda function"
+  description = "DEPRECATED, use tracing_config.enabled instead. Whether to enable AWS X-Ray tracing for the Lambda function."
   type        = bool
   default     = false
 }
 
 variable "tracing_mode" {
-  description = "Tracing mode for AWS X-Ray (e.g., PassThrough, Active)"
+  description = "DEPRECATED, use tracing_config.mode instead. Tracing mode for AWS X-Ray (e.g., PassThrough, Active)."
   type        = string
   default     = "PassThrough"
 
@@ -145,14 +175,23 @@ variable "tracing_mode" {
   }
 }
 
+variable "vpc_config" {
+  description = "VPC configuration for the Lambda function. When set, takes precedence over the deprecated vpc_subnet_ids / vpc_security_group_ids variables; when null, those are used as a fallback. If neither the object nor the legacy variables are set, the function is not deployed in a VPC."
+  type = object({
+    subnet_ids         = list(string)
+    security_group_ids = list(string)
+  })
+  default = null
+}
+
 variable "vpc_subnet_ids" {
-  description = "List of subnet IDs for the Lambda function VPC configuration"
+  description = "DEPRECATED, use vpc_config.subnet_ids instead. List of subnet IDs for the Lambda function VPC configuration."
   type        = list(string)
   default     = null
 }
 
 variable "vpc_security_group_ids" {
-  description = "List of security group IDs for the Lambda function VPC configuration"
+  description = "DEPRECATED, use vpc_config.security_group_ids instead. List of security group IDs for the Lambda function VPC configuration."
   type        = list(string)
   default     = null
 }
@@ -163,14 +202,39 @@ variable "addl_assume_role_policy_principles" {
   default     = []
 }
 
+variable "cloudwatch_logs" {
+  description = "CloudWatch Logs configuration for the Lambda function. Takes precedence over the deprecated enable_cloudwatch_logs / cloudwatch_retention_in_days / cloudwatch_kms_key_arn variables."
+  type = object({
+    enabled           = optional(bool, true)
+    retention_in_days = optional(number, 30)
+    kms_key_arn       = optional(string)
+  })
+  default = null
+
+  validation {
+    condition = var.cloudwatch_logs == null || contains(
+      [0, 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1096, 1827, 2192, 2557, 2922, 3288, 3653],
+      var.cloudwatch_logs.retention_in_days
+    )
+    error_message = "cloudwatch_logs.retention_in_days must be a valid CloudWatch Logs retention value (0, 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1096, 1827, 2192, 2557, 2922, 3288, or 3653). 0 means never expire."
+  }
+
+  validation {
+    # null kms_key_arn = no CMK (passed straight through). Partition left open
+    # (aws / aws-us-gov / aws-cn); key/ allows the mrk- multi-region prefix.
+    condition     = var.cloudwatch_logs == null || var.cloudwatch_logs.kms_key_arn == null || can(regex("^arn:aws[a-z-]*:kms:[a-z0-9-]+:[0-9]{12}:(key/[0-9a-zA-Z-]+|alias/[a-zA-Z0-9/_-]+)$", var.cloudwatch_logs.kms_key_arn))
+    error_message = "cloudwatch_logs.kms_key_arn must be null or a valid KMS key or alias ARN (e.g. arn:aws:kms:us-east-1:123456789012:key/<id>)."
+  }
+}
+
 variable "enable_cloudwatch_logs" {
-  description = "Flag to enable or disable the creation of CloudWatch Logs"
+  description = "DEPRECATED, use cloudwatch_logs.enabled instead. Flag to enable or disable the creation of CloudWatch Logs."
   type        = bool
   default     = true
 }
 
 variable "cloudwatch_retention_in_days" {
-  description = "Number of days to retain log events in the specified log group"
+  description = "DEPRECATED, use cloudwatch_logs.retention_in_days instead. Number of days to retain log events in the specified log group."
   type        = number
   default     = 30
 
@@ -184,7 +248,7 @@ variable "cloudwatch_retention_in_days" {
 }
 
 variable "cloudwatch_kms_key_arn" {
-  description = "KMS Key ARN to encrypt the CloudWatch Logs"
+  description = "DEPRECATED, use cloudwatch_logs.kms_key_arn instead. KMS Key ARN to encrypt the CloudWatch Logs."
   type        = string
   default     = null
 
