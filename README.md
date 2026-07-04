@@ -126,6 +126,7 @@ will find a compatible version automatically.
 | <a name="input_layers"></a> [layers](#input_layers) | List of ARNs of Lambda layers to include | `list(string)` | `[]` | no |
 | <a name="input_memory_size"></a> [memory_size](#input_memory_size) | Amount of memory in MB allocated for the Lambda function | `number` | `128` | no |
 | <a name="input_name"></a> [name](#input_name) | A descriptive but short name used for labels by the 'bendoerr-terraform-modules/terraform-null-label' module. | `string` | `"thing"` | no |
+| <a name="input_permissions_boundary"></a> [permissions_boundary](#input_permissions_boundary) | ARN of the IAM policy to set as the permissions boundary on the Lambda's execution role. Null (the default) leaves the role unbounded. Set this to cap the role's effective permissions when a least-privilege deploy identity manages its inline policies. | `string` | `null` | no |
 | <a name="input_publish"></a> [publish](#input_publish) | Whether to publish a new version of the Lambda function | `bool` | `false` | no |
 | <a name="input_runtime"></a> [runtime](#input_runtime) | Runtime environment for the Lambda function (e.g., python3.9, nodejs14.x) | `string` | n/a | yes |
 | <a name="input_source_code_hash"></a> [source_code_hash](#input_source_code_hash) | Used to trigger updates when the content of the Lambda function changes (filebase64sha256 of the source code). If not provided, filebase64sha256(var.filename) will be used. | `string` | `null` | no |

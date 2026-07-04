@@ -272,6 +272,12 @@ variable "addl_inline_policies" {
   default     = {}
 }
 
+variable "permissions_boundary" {
+  description = "ARN of the IAM policy to set as the permissions boundary on the Lambda's execution role. Null (the default) leaves the role unbounded. Set this to cap the role's effective permissions when a least-privilege deploy identity manages its inline policies."
+  type        = string
+  default     = null
+}
+
 variable "source_code_hash" {
   description = "Used to trigger updates when the content of the Lambda function changes (filebase64sha256 of the source code). If not provided, filebase64sha256(var.filename) will be used."
   type        = string
