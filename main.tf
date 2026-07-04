@@ -96,9 +96,10 @@ data "aws_iam_policy_document" "assume_role_policy" {
 }
 
 resource "aws_iam_role" "this" {
-  name               = module.label.id
-  tags               = module.label.tags
-  assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
+  name                 = module.label.id
+  tags                 = module.label.tags
+  assume_role_policy   = data.aws_iam_policy_document.assume_role_policy.json
+  permissions_boundary = var.permissions_boundary
 }
 
 data "aws_iam_policy_document" "cloudwatch_logs" {
