@@ -84,7 +84,7 @@ jobs:
       - name: Set up Terraform
         uses: step-security/setup-terraform@856d52e2f56619a4928ffc98bf60837d96a8e682 # v4.0.1
 
-      - uses: aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c # v6.2.3
+      - uses: aws-actions/configure-aws-credentials@cbe3b392738ccf3f987d68400dafcf4b0624a56c # v6.2.4
         with:
           role-to-assume: ${{ vars.CORE_APPLY_ROLE }}
           aws-region: us-east-1
@@ -94,7 +94,7 @@ jobs:
           aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }} --profile core-profile
           aws configure set aws_session_token ${{ env.AWS_SESSION_TOKEN }} --profile core-profile
 
-      - uses: aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c # v6.2.3
+      - uses: aws-actions/configure-aws-credentials@cbe3b392738ccf3f987d68400dafcf4b0624a56c # v6.2.4
         with:
           role-to-assume: ${{ vars.SANDBOX_APPLY_ROLE }}
           aws-region: us-east-1
