@@ -99,6 +99,12 @@ jobs:
           role-to-assume: ${{ vars.SANDBOX_APPLY_ROLE }}
           aws-region: us-east-1
 
+      - name: Acquire sandbox lock
+        uses: bendoerr-terraform-modules/workflows/.github/actions/sandbox-lock@d72cfaafccf23642aaf8bd317bf68f6d9bacd635 # v1.3.0
+        with:
+          mode: acquire
+          role: reader
+
       - shell: bash
         working-directory: test
         env:
@@ -115,3 +121,10 @@ jobs:
         with:
           paths: test/report.xml
         if: always()
+
+      - name: Release sandbox lock
+        if: always()
+        uses: bendoerr-terraform-modules/workflows/.github/actions/sandbox-lock@d72cfaafccf23642aaf8bd317bf68f6d9bacd635 # v1.3.0
+        with:
+          mode: release
+          role: reader
